@@ -6,7 +6,7 @@
 #    By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/23 18:30:58 by chuezeri          #+#    #+#              #
-#    Updated: 2024/11/23 19:37:18 by chuezeri         ###   ########.fr        #
+#    Updated: 2024/11/23 19:57:20 by chuezeri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,11 +82,11 @@ bonus:	$(OBJS) $(BONUS_OBJS)
 
 # Clean rule (remove object files)
 clean:
-	$(RM) *.o
+	$(RM) *.o $(LIBFT_PATH)/*.o
 
 # Full clean (remove object files and static library)
 fclean: clean
-	$(RM) $(NAME)
+	$(RM) $(NAME) $(LIBFT)
 
 # Rebuild the project
 re: fclean all
