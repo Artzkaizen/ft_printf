@@ -6,7 +6,7 @@
 #    By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/23 18:30:58 by chuezeri          #+#    #+#              #
-#    Updated: 2024/11/23 19:57:20 by chuezeri         ###   ########.fr        #
+#    Updated: 2024/11/25 19:19:06 by chuezeri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,8 +26,11 @@ TEST_OBJ_DIR    := test/obj
 
 # Source files
 SRCS            := ft_printf.c
+TESTS      		:= main.c
 
 OBJS		:= $(SRCS:%.c=%.o)
+TESTS		:= $(TESTS:%=$(TEST_DIR)/%)
+TEST_OBJS	:= $(TESTS:$(TEST_DIR)/%.c=$(TEST_OBJ_DIR)/%.o)
 
 BONUS		:=
 BONUS_OBJS	:= $(BONUS:%.c=%.o)
@@ -59,6 +62,7 @@ all: $(NAME)
 
 # Run tests
 test: $(TARGET)
+	@echo "\033[33mStarting Test below\033[0m"
 	./$(TARGET)
 
 # Rule to build the static library
@@ -71,6 +75,10 @@ $(LIBFT):
 # Rule to compile the library source files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
+
+# Rule to compile the library testing source files
+$(TEST_OBJ_DIR)/%.o: $(TEST_DIR)/%.c
+	$(CC) $(CFLAGS) -I. -c $< -o $@
 
 # For testing
 $(TARGET): $(TEST_OBJS) $(OBJS)
@@ -86,10 +94,10 @@ clean:
 
 # Full clean (remove object files and static library)
 fclean: clean
-	$(RM) $(NAME) $(LIBFT)
+	$(RM) $(NAME) $(LIBFT) $(TARGET)
 
 # Rebuild the project
-re: fclean all
+re: fclean all test
 
 # Phony targets
-.PHONY: clean fclean re
+.PHONY: clean fclean re test
