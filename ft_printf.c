@@ -62,28 +62,109 @@
 
 // }
 
-int	ft_printf(const char *str, ...)
+void print_double(double value)
 {
-	size_t	i;
-	va_list	args;
+	int i;
+	int digit;
+	int offset;
+	int int_len;
+	char buffer[64];
+	char int_str[32];
+	int integer_part;
+	int temp = integer_part;
+	double fractional_part = value - integer_part;
+
+	int_len = 0;
+	integer_part = (int)value;
+	if (fractional_part < 0)
+		fractional_part = -fractional_part;
+
+	offset = 0;
+	if (value < 0)
+	{
+		buffer[offset++] = '-';
+		integer_part = -integer_part;
+	}
+	if (temp == 0)
+		int_str[int_len++] = '0';
+	while (temp > 0)
+	{
+		int_str[int_len++] = '0' + (temp % 10);
+		temp /= 10;
+	}
+	// Reverse the integer string and append to the buffer
+	i = int_len - 1;
+	while (i >= 0)
+	{
+		buffer[offset++] = int_str[i];
+		i--;
+	}
+	// Add the decimal point
+	buffer[offset++] = '.';
+	// Convert fractional part to string (up to 6 decimal places)
+	while (fractional_part > 0 && offset < sizeof(buffer) - 1)
+	{
+		fractional_part *= 10;
+		digit = (int)fractional_part;
+		buffer[offset++] = '0' + digit;
+		fractional_part -= digit;
+	}
+	buffer[offset] = '\0';
+	ft_putstr_fd(buffer, STDOUT_FILENO);
+}
+
+#include <unistd.h>
+
+void print_hex(unsigned int value, int (*f)(int))
+{
+	char buffer[16];
+	const char *hex_chars;
+	int offset = 0;
+
+	hex_chars = "0123456789ABCDEF";
+	if (value == 0)
+		buffer[offset++] = '0';
+	else
+	{
+		while (value > 0)
+		{
+			buffer[offset++] = f(hex_chars[value % 16]);
+			value /= 16;
+		}
+		for (int i = 0; i < offset / 2; ++i)
+		{
+			char temp = buffer[i];
+			buffer[i] = buffer[offset - i - 1];
+			buffer[offset - i - 1] = temp;
+		}
+	}
+	buffer[offset] = '\0';
+	ft_putstr_fd(buffer, STDOUT_FILENO);
+}
+
+int ft_printf(const char *str, ...)
+{
+	size_t i;
+	va_list args;
 
 	i = 0;
 	va_start(args, str);
 	while (str[i])
 	{
-		if (str[i] == '%' && str[i + 1] == 's')
+		if (str[i] == '%' && ft_strchr("cspdiuxX", str[i + 1]))
 		{
-			ft_putstr_fd(va_arg(args, char *), STDOUT_FILENO);
-			i += 2;
-		}
-		else if (str[i] == '%' && str[i + 1] == 'c')
-		{
-			ft_putchar_fd(va_arg(args, int), STDOUT_FILENO);
-			i += 2;
-		}
-		else if (str[i] == '%' && str[i + 1] == 'd')
-		{
-			ft_putnbr_fd(va_arg(args, int), STDOUT_FILENO);
+			if (str[i + 1] == 's')
+				ft_putstr_fd(va_arg(args, char *), STDOUT_FILENO);
+			else if (str[i + 1] == 'c')
+				ft_putchar_fd(va_arg(args, int), STDOUT_FILENO);
+			else if (str[i + 1] == 'i' || str[i + 1] == 'd')
+				ft_putnbr_fd(va_arg(args, int), STDOUT_FILENO);
+			else if (str[i + 1] == 'p')
+				ft_putstr_fd((va_arg(args, void *)), STDOUT_FILENO);
+			else if (str[i + 1] == 'x')
+				print_hex(va_arg(args, int), ft_tolower);
+			else if (str[i + 1] == 'X')
+				print_hex(va_arg(args, int), ft_toupper);
 			i += 2;
 		}
 		else
