@@ -6,7 +6,7 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 10:00:16 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/11/25 17:00:07 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/11/28 13:52:50 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,14 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-# include "libft.h"
 
-
-int	ft_printf(const char *str, ...);
+int		ft_tolower(int c);
+int		ft_toupper(int c);
+size_t	ft_strlen(const char *str);
+int		ft_printf(const char *str, ...);
+char	*ft_strchr(const char *s, int c);
+void	ft_putnbr_fd(int n, int fd, int *count);
+void	ft_print_char_fd(char c, int fd, int *count);
+void	ft_print_str_fd(char *str, int fd, int *count);
 
 #endif

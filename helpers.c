@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 22:10:08 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/11/18 19:36:18 by chuezeri         ###   ########.fr       */
+/*   Created: 2024/11/28 13:54:55 by chuezeri          #+#    #+#             */
+/*   Updated: 2024/11/28 13:55:08 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-t_list	*ft_lstnew(void const *content)
+int	ft_tolower(int c)
 {
-	t_list	*new_list;
+	if (c >= 'A' && c <= 'Z')
+		c += 32;
+	return (c);
+}
 
-	new_list = (t_list *)malloc(sizeof(t_list));
-	if (!new_list)
-		return (NULL);
-	new_list->content = (void *)content;
-	new_list->next = NULL;
-	return (new_list);
+int	ft_toupper(int c)
+{
+	if (c >= 'a' && c <= 'z')
+		c -= 32;
+	return (c);
 }

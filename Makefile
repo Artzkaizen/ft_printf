@@ -6,7 +6,7 @@
 #    By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/23 18:30:58 by chuezeri          #+#    #+#              #
-#    Updated: 2024/11/25 19:19:06 by chuezeri         ###   ########.fr        #
+#    Updated: 2024/11/28 13:51:07 by chuezeri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,15 +17,16 @@ TARGET          := test_runner
 # Directories
 
 
-LIBFT_PATH		:= ./libft
-LIBFT			:= $(LIBFT_PATH)/libft.a
+# LIBFT_PATH		:= ./libft
+# LIBFT			:= $(LIBFT_PATH)/libft.a
 SRC_DIR         := src
 OBJ_DIR         := obj
 TEST_DIR        := test
 TEST_OBJ_DIR    := test/obj
 
 # Source files
-SRCS            := ft_printf.c
+SRCS            := ft_printf.c \
+                   utils.c
 TESTS      		:= main.c
 
 OBJS		:= $(SRCS:%.c=%.o)
@@ -39,7 +40,7 @@ BONUS_OBJS	:= $(BONUS:%.c=%.o)
 CRITERION	:= ${HOME}/sgoinfre/linuxbrew/.linuxbrew/Cellar/criterion/2.4.2_1/include
 
 # Include paths
-INCLUDES		:= -I $(LIBFT_PATH)
+INCLUDES		:= -I.
 
 
 # Compiler and flags
@@ -67,11 +68,8 @@ test: $(TARGET)
 
 # Rule to build the static library
 $(NAME): $(OBJS) $(LIBFT)
-	cp $(LIBFT) $(NAME)
 	$(LIBFLAGS) $(NAME) $(OBJS)
 
-$(LIBFT): 
-	make -C $(LIBFT_PATH) all
 # Rule to compile the library source files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -90,7 +88,7 @@ bonus:	$(OBJS) $(BONUS_OBJS)
 
 # Clean rule (remove object files)
 clean:
-	$(RM) *.o $(LIBFT_PATH)/*.o
+	$(RM) *.o
 
 # Full clean (remove object files and static library)
 fclean: clean
