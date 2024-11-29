@@ -6,7 +6,7 @@
 #    By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/23 18:30:58 by chuezeri          #+#    #+#              #
-#    Updated: 2024/11/28 13:51:07 by chuezeri         ###   ########.fr        #
+#    Updated: 2024/11/28 14:34:35 by chuezeri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,8 @@ TEST_OBJ_DIR    := test/obj
 
 # Source files
 SRCS            := ft_printf.c \
-                   utils.c
+                   utils.c \
+				   helpers.c
 TESTS      		:= main.c
 
 OBJS		:= $(SRCS:%.c=%.o)
