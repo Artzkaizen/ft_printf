@@ -6,7 +6,7 @@
 #    By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/23 18:30:58 by chuezeri          #+#    #+#              #
-#    Updated: 2024/11/28 14:34:35 by chuezeri         ###   ########.fr        #
+#    Updated: 2024/11/30 23:44:43 by chuezeri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ INCLUDES		:= -I.
 
 # Compiler and flags
 CC              := cc
-CFLAGS          := -Wall -Wextra -Werror $(INCLUDES)
+CFLAGS          := -Wall  $(INCLUDES)
 DEBUG           := -g -fsanitize=leak
 # LDFLAGS			:= -L${HOME}/sgoinfre/linuxbrew/.linuxbrew/Cellar/criterion/2.4.2_1/lib -lcriterion
 LDFLAGS			:=

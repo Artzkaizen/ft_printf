@@ -6,32 +6,12 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:32:58 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/11/28 19:13:53 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/01 00:12:17 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdio.h>
-
-int	ft_print_char_fd(char c, int fd)
-{
-	return (write(fd, &c, 1));
-}
-
-int	ft_print_str_fd(char *str, int fd)
-{
-	int	count;
-
-	count = 0;
-	if (!str)
-		return (ft_print_str_fd("(null)", fd));
-	while (*str)
-	{
-		count += ft_print_char_fd(*str, fd);
-		str++;
-	}
-	return (count);
-}
 
 int	ft_putnbr_fd(int n, int fd, int sign)
 {
@@ -72,12 +52,68 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-size_t	ft_strlen(const char *str)
+static int	ft_is_valid_base(char *str)
 {
-	size_t	len;
+	int	i;
+	int	j;
 
-	len = 0;
-	while (str[len])
-		len++;
-	return (len);
+	i = 0;
+	while (str[i + 1] && str[i])
+	{
+		if (str[i] == '-' || str[i] == '+' || (str[i] == ' '
+				|| (str[i] >= '\t' && str[i] <= '\r')))
+			return (0);
+		j = i + 1;
+		while (str[i] && str[j])
+		{
+			if (str[i] == str[j])
+				return (0);
+			j++;
+		}
+		i++;
+	}
+	return (++i);
+}
+
+int	ft_putnbr_base(int num, char *base, int sign)
+{
+	long		nbr;
+	int			radix;
+	static int	count;
+
+	if (sign)
+		nbr = (unsigned int)num;
+	else
+		nbr = num;
+	radix = ft_is_valid_base(base);
+	if (radix > 1)
+	{
+		if (nbr >= radix)
+			ft_putnbr_base(nbr / radix, base, sign);
+		else if (nbr < 0)
+		{
+			count += ft_print_char_fd('-', STDOUT_FILENO);
+			if (nbr <= -radix)
+				ft_putnbr_base(((nbr / radix) * -1), base, sign);
+			nbr = (nbr % radix) * -1;
+		}
+		count += ft_print_char_fd(base[nbr % radix], STDOUT_FILENO);
+	}
+	return (count);
+}
+
+int	ft_putnbr_base_ul(unsigned long num, char *base)
+{
+	int			radix;
+	static int	count;
+
+	count = 0;
+	radix = ft_is_valid_base(base);
+	if (radix > 1)
+	{
+		if (num >= (unsigned long)radix)
+			ft_putnbr_base_ul(num / radix, base);
+		count += ft_print_char_fd(base[num % radix], STDOUT_FILENO);
+	}
+	return (count);
 }
