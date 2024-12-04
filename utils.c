@@ -6,37 +6,11 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:32:58 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/01 00:12:17 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/04 18:48:43 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdio.h>
-
-int	ft_putnbr_fd(int n, int fd, int sign)
-{
-	long	num;
-	int		count;
-
-	count = 0;
-	if (sign)
-		num = (unsigned int)n;
-	else
-		num = n;
-	if (num < 0)
-	{
-		count += ft_print_char_fd('-', fd);
-		num *= -1;
-	}
-	if (num >= 10)
-	{
-		count += ft_putnbr_fd(num / 10, fd, sign);
-		count += ft_print_char_fd((num % 10) + '0', fd);
-	}
-	else
-		count += ft_print_char_fd(num + '0', fd);
-	return (count);
-}
+#include "ft_printf.h"
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -75,34 +49,29 @@ static int	ft_is_valid_base(char *str)
 	return (++i);
 }
 
-int	ft_putnbr_base(int num, char *base, int sign)
+int	ft_putnbr_base(long num, char *base, int count)
 {
-	long		nbr;
 	int			radix;
-	static int	count;
 
-	if (sign)
-		nbr = (unsigned int)num;
-	else
-		nbr = num;
+	count = 0;
 	radix = ft_is_valid_base(base);
 	if (radix > 1)
 	{
-		if (nbr >= radix)
-			ft_putnbr_base(nbr / radix, base, sign);
-		else if (nbr < 0)
+		if (num < 0)
 		{
 			count += ft_print_char_fd('-', STDOUT_FILENO);
-			if (nbr <= -radix)
-				ft_putnbr_base(((nbr / radix) * -1), base, sign);
-			nbr = (nbr % radix) * -1;
+			if (num <= -radix)
+				count += ft_putnbr_base(((num / radix) * -1), base, count);
+			num = (num % radix) * -1;
 		}
-		count += ft_print_char_fd(base[nbr % radix], STDOUT_FILENO);
+		if (num >= radix)
+			count += ft_putnbr_base(num / radix, base, count);
+		count += ft_print_char_fd(base[num % radix], STDOUT_FILENO);
 	}
 	return (count);
 }
 
-int	ft_putnbr_base_ul(unsigned long num, char *base)
+int	ft_putnbr_base_ul(unsigned long long num, char *base)
 {
 	int			radix;
 	static int	count;

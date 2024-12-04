@@ -6,11 +6,11 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 18:22:28 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/01 00:12:22 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/04 19:06:37 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include "ft_printf.h"
 #include <stdarg.h>
 #include <unistd.h>
 
@@ -20,8 +20,13 @@
 
 int	ft_print_ptr(void *ptr, char *base)
 {
-	ft_print_str_fd("0x", STDOUT_FILENO);
-	return (ft_putnbr_base_ul((unsigned long)ptr, base));
+	int	count;
+
+	count = 0;
+	if (!ptr)
+		return (ft_print_str_fd("(nil)", STDOUT_FILENO));
+	count = ft_print_str_fd("0x", STDOUT_FILENO);
+	return (count + ft_putnbr_base_ul((unsigned long)ptr, base));
 }
 
 int	format_string(va_list *args, char c)
@@ -33,11 +38,11 @@ int	format_string(va_list *args, char c)
 	else if (c == 'i' || c == 'd')
 		return (ft_putnbr_base(va_arg(*args, int), DEC_BASE, 0));
 	else if (c == 'u')
-		return (ft_putnbr_base(va_arg(*args, int), DEC_BASE, 1));
+		return (ft_putnbr_base(va_arg(*args, t_u_int), DEC_BASE, 0));
 	else if (c == 'x')
-		return (ft_putnbr_base(va_arg(*args, t_u_int), HEX_BASE_LOW, 1));
+		return (ft_putnbr_base(va_arg(*args, t_u_int), HEX_BASE_LOW, 0));
 	else if (c == 'X')
-		return (ft_putnbr_base(va_arg(*args, t_u_int), HEX_BASE_UPP, 1));
+		return (ft_putnbr_base(va_arg(*args, t_u_int), HEX_BASE_UPP, 0));
 	else if (c == 'p')
 		return (ft_print_ptr(va_arg(*args, void *), HEX_BASE_LOW));
 	return (0);
@@ -45,18 +50,21 @@ int	format_string(va_list *args, char c)
 
 int	ft_printf(const char *str, ...)
 {
+	int			c;
 	size_t		i;
 	va_list		args;
-	static int	c;
 
 	i = 0;
 	c = 0;
 	va_start(args, str);
 	while (str[i])
 	{
-		if (str[i + 1] && str[i] == '%' && ft_strchr("cspdiuxX", str[i + 1]))
+		if (str[i + 1] && str[i] == '%')
 		{
-			c += format_string(&args, str[i + 1]);
+			if (ft_strchr("cspdiuxX", str[i + 1]))
+				c += format_string(&args, str[i + 1]);
+			else
+				c += ft_print_char_fd(str[i], STDOUT_FILENO);
 			i += 2;
 		}
 		else

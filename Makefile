@@ -6,7 +6,7 @@
 #    By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/23 18:30:58 by chuezeri          #+#    #+#              #
-#    Updated: 2024/11/30 23:44:43 by chuezeri         ###   ########.fr        #
+#    Updated: 2024/12/04 16:46:45 by chuezeri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,10 +15,6 @@ NAME            := libftprintf.a
 TARGET          := test_runner
 
 # Directories
-
-
-# LIBFT_PATH		:= ./libft
-# LIBFT			:= $(LIBFT_PATH)/libft.a
 SRC_DIR         := src
 OBJ_DIR         := obj
 TEST_DIR        := test
@@ -34,12 +30,6 @@ OBJS		:= $(SRCS:%.c=%.o)
 TESTS		:= $(TESTS:%=$(TEST_DIR)/%)
 TEST_OBJS	:= $(TESTS:$(TEST_DIR)/%.c=$(TEST_OBJ_DIR)/%.o)
 
-BONUS		:=
-BONUS_OBJS	:= $(BONUS:%.c=%.o)
-
-
-CRITERION	:= ${HOME}/sgoinfre/linuxbrew/.linuxbrew/Cellar/criterion/2.4.2_1/include
-
 # Include paths
 INCLUDES		:= -I.
 
@@ -48,7 +38,6 @@ INCLUDES		:= -I.
 CC              := cc
 CFLAGS          := -Wall  $(INCLUDES)
 DEBUG           := -g -fsanitize=leak
-# LDFLAGS			:= -L${HOME}/sgoinfre/linuxbrew/.linuxbrew/Cellar/criterion/2.4.2_1/lib -lcriterion
 LDFLAGS			:=
 
 
@@ -83,20 +72,16 @@ $(TEST_OBJ_DIR)/%.o: $(TEST_DIR)/%.c
 $(TARGET): $(TEST_OBJS) $(OBJS)
 	$(CC) $(TEST_OBJS) $(OBJS) -o $(TARGET) $(NAME) $(LDFLAGS)
 
-# bonus
-bonus:	$(OBJS) $(BONUS_OBJS)
-	ar rcs $(NAME) $(OBJS) $(BONUS_OBJS)
-
 # Clean rule (remove object files)
 clean:
-	$(RM) *.o
+	$(RM) $(OBJS)
 
 # Full clean (remove object files and static library)
 fclean: clean
 	$(RM) $(NAME) $(LIBFT) $(TARGET)
 
 # Rebuild the project
-re: fclean all test
+re: fclean all
 
 # Phony targets
-.PHONY: clean fclean re test
+.PHONY: clean fclean re

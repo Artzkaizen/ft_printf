@@ -6,11 +6,11 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:54:55 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/01 00:11:32 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:21:07 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include "ft_printf.h"
 
 int	ft_tolower(int c)
 {
