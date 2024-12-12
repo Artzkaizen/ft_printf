@@ -6,7 +6,7 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 18:22:28 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/04 19:06:37 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/10 18:20:55 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,32 @@
 #define DEC_BASE "0123456789"
 #define HEX_BASE_UPP "0123456789ABCDEF"
 #define HEX_BASE_LOW "0123456789abcdef"
+
+size_t	ft_strlen(const char *str)
+{
+	size_t	len;
+
+	len = 0;
+	while (str[len])
+		len++;
+	return (len);
+}
+
+int	ft_putnbr_base_ul(unsigned long long num, char *base)
+{
+	int			radix;
+	static int	count;
+
+	count = 0;
+	radix = ft_is_valid_base(base);
+	if (radix > 1)
+	{
+		if (num >= (unsigned long)radix)
+			ft_putnbr_base_ul(num / radix, base);
+		count += ft_print_char_fd(base[num % radix], STDOUT_FILENO);
+	}
+	return (count);
+}
 
 int	ft_print_ptr(void *ptr, char *base)
 {
